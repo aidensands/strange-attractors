@@ -26,9 +26,15 @@ struct Vec3
 
         return *this;
     }
+
+    Vec3(float x, float y, float z)
+        : x(x), y(y), z(z)
+    {
+
+    }
 };
 
-inline Vec3 operator+(Vec3 &a, Vec3 &b)
+inline Vec3 operator+(Vec3 a, const Vec3 &b)
 {
     return a += b;
 }
