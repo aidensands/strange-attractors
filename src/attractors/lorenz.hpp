@@ -7,7 +7,7 @@ public:
     Lorenz(float &sigma, float &rho, float &beta);
     ~Lorenz();
 
-    virtual Update getNextStep() override;
+    virtual Vec3 getNextStep(const Vec3 currentPosition, float dt) const override;
 
 private:
 
