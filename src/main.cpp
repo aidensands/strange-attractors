@@ -6,6 +6,8 @@
 #include "attractors/aizawa.hpp"
 #include "attractors/rossler.hpp"
 #include "attractors/halvorson.hpp"
+#include "attractors/sprott-linz.hpp"
+#include "attractors/chua.hpp"
 #include <vector>
 
 float jitter()
@@ -59,6 +61,8 @@ int main()
     attractors.push_back(make_unique<Rossler>());
     attractors.push_back(make_unique<Aizawa>());
     attractors.push_back(make_unique<Halvorson>());
+    attractors.push_back(make_unique<SprottLinz>());
+    attractors.push_back(make_unique<Chua>());
     
     cout << "Successfully Loaded Chaotic Systems" <<endl;
 
@@ -134,6 +138,13 @@ int main()
 
         BeginDrawing();
             ClearBackground(BLACK);
+
+            DrawRectangle(
+                0, 0,
+                GetScreenWidth(),
+                GetScreenHeight(),
+                Fade(BLACK, 0.08f)
+            );
 
             BeginMode3D(camera);
                 drawParticles(particles, camera, glow, currentAttractor.getParticleSize());
