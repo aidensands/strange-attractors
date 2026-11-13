@@ -26,6 +26,13 @@ struct Vec3
 
         return *this;
     }
+   
+    Vec3()
+    {
+        x = 0.0;
+        y = 0.0;
+        z = 0.0;
+    }
 
     Vec3(float x, float y, float z)
         : x(x), y(y), z(z)
