@@ -1,6 +1,8 @@
 #pragma once
 #include "vec3.hpp"
+#include <string>
 
+using namespace std;
 
 class Attractor
 {
@@ -27,10 +29,11 @@ public:
 
 private:
 
+    
     float particleSize;
     Vec3 cameraPosition;
     Vec3 cameraTarget;
-
+    string name;
 };
 
 

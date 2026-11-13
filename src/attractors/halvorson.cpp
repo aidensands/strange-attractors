@@ -26,5 +26,5 @@ Vec3 Halvorson::getCameraTarget() const
 
 float Halvorson::getParticleSize() const
 {
-    return 0.05;
+    return 0.1;
 }

@@ -27,7 +27,7 @@ private:
     float sigma;
     float rho;
     float beta;
-
+    string name = "Lorenz";
 };
 
 

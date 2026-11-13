@@ -1,5 +1,5 @@
 #include "attractor.hpp"
-
+#include <string>
 
 Vec3 Attractor::getNextStep(const Vec3 &currentPosition, float dt) const
 {
@@ -11,4 +11,3 @@ Vec3 Attractor::getNextStep(const Vec3 &currentPosition, float dt) const
 
     return currentPosition + (dt / 6.0f) * (k1 + k2 * 2.0f + k3 * 2.0f + k4);
 }
-

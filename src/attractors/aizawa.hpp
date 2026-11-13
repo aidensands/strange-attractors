@@ -37,4 +37,5 @@ private:
     float d;
     float e;
     float f;
+    string name = "Aizawa";
 };

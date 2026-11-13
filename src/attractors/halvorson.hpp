@@ -21,4 +21,5 @@ class Halvorson : public Attractor
 
     private:
         float a;
+        string name = "Halvorson";
 };

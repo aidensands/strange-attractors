@@ -25,7 +25,7 @@ void drawParticles(const std::vector<Vec3> &particles, const Camera3D &camera,
     Vector3 v = Vector3Scale(up,    size * 0.5f);
 
     rlDisableDepthMask();
-    BeginBlendMode(BLEND_ALPHA);
+    BeginBlendMode(BLEND_ADDITIVE);
     rlSetTexture(glow.id);
     rlBegin(RL_QUADS);
     rlColor4ub(135, 206, 235, 100);
@@ -52,44 +52,76 @@ int main()
     const int STEPS_PER_FRAME = 1;
     const float TIMESTEP = 0.005f;
 
-    InitWindow(1800, 1800, "Strange Attractor Sim");
-    SetTargetFPS(60);
+    std::vector<unique_ptr<Attractor>> attractors;
+    attractors.reserve(4);
 
-    Image billBoardImage = GenImageGradientRadial(128, 128, 0.75f, WHITE, BLANK);
-    Texture2D glow = LoadTextureFromImage(billBoardImage);
-    UnloadImage(billBoardImage);
-    SetTextureFilter(glow, TEXTURE_FILTER_POINT);
+    attractors.push_back(make_unique<Lorenz>());
+    attractors.push_back(make_unique<Rossler>());
+    attractors.push_back(make_unique<Aizawa>());
+    attractors.push_back(make_unique<Halvorson>());
     
+    cout << "Successfully Loaded Chaotic Systems" <<endl;
 
-    Aizawa currentAttractor;
-
-    Vec3 origin = currentAttractor.initialState();
 
     std::vector<Vec3> particles;
     particles.reserve(MAX_PARTICLES);
 
-    for (size_t i = 0; i < MAX_PARTICLES; i++)
-    {
-        particles.push_back(Vec3(origin.x + jitter(), origin.y + jitter(), origin.z + jitter()));
-    }
+    InitWindow(1800, 1800, "Strange Attractor Sim");
+    SetTargetFPS(60);
+    Camera3D camera = {0};
+    Image billBoardImage = GenImageGradientRadial(128, 128, 0.75f, WHITE, BLANK);
+    Texture2D glow = LoadTextureFromImage(billBoardImage);
+    UnloadImage(billBoardImage);
+    SetTextureFilter(glow, TEXTURE_FILTER_POINT);
 
-    
+    auto select = [&](size_t index)
+    {
+        cout << "Selecting attractor at: " << index << endl;
+        Attractor &a = *attractors[index];
+        particles.clear();
+        Vec3 updatedOrigin = a.initialState();
+        Vec3 updatedCameraPosition = a.getCameraPosition();
+        Vec3 updatedCameraTarget = a.getCameraTarget();
+        camera.up = {0.0f, 0.0f, 1.0f};
+        camera.position = {updatedCameraPosition.x, updatedCameraPosition.y, updatedCameraPosition.z};
+        camera.target = {updatedCameraTarget.x, updatedCameraTarget.y, updatedCameraTarget.z};
+        cout << "Cleared particle meshes, respawning now" << endl;
+        for (size_t i = 0; i < MAX_PARTICLES; i++)
+        {
+            particles.push_back(Vec3(updatedOrigin.x + jitter(), updatedOrigin.y + jitter(), updatedOrigin.z + jitter()));
+        }
+        return &a;
+    };
+
+    Attractor &currentAttractor = *attractors[0];
+    Vec3 origin = currentAttractor.initialState();
     Vec3 positionPreset = currentAttractor.getCameraPosition();
     Vec3 targetPreset = currentAttractor.getCameraTarget();
-
-    Camera3D camera = {0};
     camera.position = {positionPreset.x, positionPreset.y, positionPreset.z};
     camera.up = { 0.0f, 0.0f, 1.0f };
     camera.target = {targetPreset.x, targetPreset.y, targetPreset.z};
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 
+    for (size_t i = 0; i < MAX_PARTICLES; i++)
+    {
+        particles.push_back(Vec3(origin.x + jitter(), origin.y + jitter(), origin.z + jitter()));
+    }
 
+    size_t currentIndex = 0;
 
     while (!WindowShouldClose())
     {
+        Attractor &currentAttractor = *attractors[currentIndex];
 
         // We calculate this many updates per frame
+
+        if (IsKeyPressed(KEY_RIGHT))
+        {
+            currentIndex++;
+            currentAttractor = *select(currentIndex);
+        }
+        
         for (size_t i = 0; i < STEPS_PER_FRAME; ++i)
         {
             for (Vec3 &particle : particles)
@@ -102,9 +134,6 @@ int main()
 
         BeginDrawing();
             ClearBackground(BLACK);
-
-        DrawText(TextFormat("n=%d  p0=%.2f %.2f %.2f", (int)particles.size(),
-                particles[0].x, particles[0].y, particles[0].z), 10, 40, 20, WHITE);
 
             BeginMode3D(camera);
                 drawParticles(particles, camera, glow, currentAttractor.getParticleSize());

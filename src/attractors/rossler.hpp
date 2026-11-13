@@ -24,5 +24,5 @@ class Rossler : public Attractor
         float a;
         float b;
         float c;
-
+        string name = "Rössler";
 };
