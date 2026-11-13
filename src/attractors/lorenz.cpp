@@ -27,8 +27,7 @@ Vec3 Lorenz::getCameraTarget() const
     return Vec3(0.0, 0.0, 10.0);
 }
 
-
 float Lorenz::getParticleSize() const
 {
-    return 0.50f;
+    return 0.20f;
 }

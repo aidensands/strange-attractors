@@ -26,8 +26,7 @@ Vec3 Aizawa::getCameraTarget() const
     return Vec3(0.0, 0.0, 0.0);
 }
 
-
 float Aizawa::getParticleSize() const
 {
-    return 0.05;
+    return 0.01;
 }

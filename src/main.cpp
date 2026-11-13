@@ -4,6 +4,8 @@
 #include "attractors/vec3.hpp"
 #include "attractors/lorenz.hpp"
 #include "attractors/aizawa.hpp"
+#include "attractors/rossler.hpp"
+#include "attractors/halvorson.hpp"
 #include <vector>
 
 float jitter()
@@ -26,7 +28,7 @@ void drawParticles(const std::vector<Vec3> &particles, const Camera3D &camera,
     BeginBlendMode(BLEND_ALPHA);
     rlSetTexture(glow.id);
     rlBegin(RL_QUADS);
-    rlColor4ub(135, 206, 235, 60);
+    rlColor4ub(135, 206, 235, 100);
 
     for (const Vec3 &p : particles)
     {
@@ -53,11 +55,11 @@ int main()
     InitWindow(1800, 1800, "Strange Attractor Sim");
     SetTargetFPS(60);
 
-    Image billBoardImage = GenImageGradientRadial(128, 128, 0.0f, WHITE, BLANK);
+    Image billBoardImage = GenImageGradientRadial(128, 128, 0.75f, WHITE, BLANK);
     Texture2D glow = LoadTextureFromImage(billBoardImage);
     UnloadImage(billBoardImage);
-    GenTextureMipmaps(&glow);
-    SetTextureFilter(glow, TEXTURE_FILTER_TRILINEAR);
+    SetTextureFilter(glow, TEXTURE_FILTER_POINT);
+    
 
     Aizawa currentAttractor;
 

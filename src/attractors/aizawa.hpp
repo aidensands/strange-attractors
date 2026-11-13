@@ -1,3 +1,5 @@
+#pragma once
+
 #include "attractor.hpp"
 #include "vec3.hpp"
 #include <iostream>
