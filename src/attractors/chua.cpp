@@ -4,8 +4,8 @@ static float f(float x)
 {
     // Nonlinear function for diode modeling, required for chuas ODE
 
-    float m0 = static_cast<float>(-8/7);   
-    float m1 = static_cast<float>(-5/7);
+    float m0 = -8.0f / 7.0f;   
+    float m1 = -5.0f / 7.0f;
 
     return m1 * x  + 0.5f * (m0 - m1) * (abs(x + 1.0f) - abs(x - 1.0f));
 }

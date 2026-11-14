@@ -10,6 +10,11 @@
 #include "attractors/chua.hpp"
 #include <vector>
 
+
+const size_t MAX_PARTICLES = 10000;
+const int STEPS_PER_FRAME = 1;
+const float TIMESTEP = 0.005f;
+
 float jitter()
 {
     return GetRandomValue(-1000, 1000) / 1000.0f * 0.5f;
@@ -48,11 +53,18 @@ void drawParticles(const std::vector<Vec3> &particles, const Camera3D &camera,
     rlEnableDepthMask();
 }
 
+void reset_particles(vector<Vec3> &particles, Vec3 origin)
+{
+    particles.clear();
+    for (size_t i = 0; i < MAX_PARTICLES; ++i)
+    {
+        particles.push_back(Vec3(origin.x + jitter(), origin.y + jitter(), origin.z + jitter()));
+    }
+    cout << "Manual particle clear and respawn done" << endl;
+}
+
 int main()
 {
-    const size_t MAX_PARTICLES = 10000;
-    const int STEPS_PER_FRAME = 1;
-    const float TIMESTEP = 0.005f;
 
     std::vector<unique_ptr<Attractor>> attractors;
     attractors.reserve(4);
@@ -70,8 +82,13 @@ int main()
     std::vector<Vec3> particles;
     particles.reserve(MAX_PARTICLES);
 
-    InitWindow(1800, 1800, "Strange Attractor Sim");
+    auto monitor = GetCurrentMonitor();
+    auto monitorWidth = GetMonitorWidth(monitor);
+    auto monitorHeight = GetMonitorHeight(monitor);
+    
+    InitWindow(1200, 800, "Strange Attractor Sim");
     SetTargetFPS(60);
+    ToggleFullscreen();
     Camera3D camera = {0};
     Image billBoardImage = GenImageGradientRadial(128, 128, 0.75f, WHITE, BLANK);
     Texture2D glow = LoadTextureFromImage(billBoardImage);
@@ -81,7 +98,7 @@ int main()
     auto select = [&](size_t index)
     {
         cout << "Selecting attractor at: " << index << endl;
-        Attractor &a = *attractors[index];
+        Attractor &a = *attractors.at(index);
         particles.clear();
         Vec3 updatedOrigin = a.initialState();
         Vec3 updatedCameraPosition = a.getCameraPosition();
@@ -124,6 +141,17 @@ int main()
         {
             currentIndex++;
             currentAttractor = *select(currentIndex);
+        }
+        
+        if (IsKeyPressed(KEY_LEFT))
+        {
+            currentIndex--;
+            currentAttractor = *select(currentIndex);
+        }
+        
+        if (IsKeyPressed(KEY_R))
+        {
+            reset_particles(particles, currentAttractor.initialState());
         }
         
         for (size_t i = 0; i < STEPS_PER_FRAME; ++i)

@@ -15,6 +15,8 @@ strange-attractors is a `raylib` based simulator for modeling chaos attractors i
 8. The Sprott B Attractor
 9. The Dadras Attractor
 10. The Rabinovich-Fabrikant Attractor
+11. The Sprott-Linz A Attractor
+12. The Chua Circuit Attractor
 
 
 ## Usage
