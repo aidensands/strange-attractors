@@ -21,4 +21,5 @@ class Chua : public Attractor
     private:
         float alpha;
         float beta;
+        string name = "Chua";
 };

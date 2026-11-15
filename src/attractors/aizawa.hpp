@@ -19,7 +19,6 @@ public:
         d = 3.5;
         e = 0.25;
         f = 0.1;
-
         cout << "Spawned Aizawa Chaotic System!" << endl;
 
     }

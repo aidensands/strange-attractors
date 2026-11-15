@@ -20,4 +20,5 @@ class SprottLinz : public Attractor
         
     private:
         float a;
+        string name = "Sprott-Linz A";
 };

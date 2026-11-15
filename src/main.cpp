@@ -10,6 +10,7 @@
 #include "attractors/chua.hpp"
 #include <vector>
 
+using namespace std;
 
 const size_t MAX_PARTICLES = 10000;
 const int STEPS_PER_FRAME = 1;
@@ -98,6 +99,12 @@ int main()
     auto select = [&](size_t index)
     {
         cout << "Selecting attractor at: " << index << endl;
+
+        if (index < 0 | index > attractors.size() - 1)
+        {
+            /* code */
+        }
+        
         Attractor &a = *attractors.at(index);
         particles.clear();
         Vec3 updatedOrigin = a.initialState();
@@ -129,23 +136,31 @@ int main()
         particles.push_back(Vec3(origin.x + jitter(), origin.y + jitter(), origin.z + jitter()));
     }
 
-    size_t currentIndex = 0;
+    signed int currentIndex = 0;
 
     while (!WindowShouldClose())
     {
         Attractor &currentAttractor = *attractors[currentIndex];
-
         // We calculate this many updates per frame
 
         if (IsKeyPressed(KEY_RIGHT))
         {
             currentIndex++;
+            if (currentIndex > attractors.size() - 1)
+            {
+                cout << "Cycling selector" << endl;
+                currentIndex = 0;
+            }
             currentAttractor = *select(currentIndex);
         }
         
         if (IsKeyPressed(KEY_LEFT))
         {
             currentIndex--;
+            if (currentIndex < 0)
+            {
+                currentIndex = attractors.size() - 1;
+            }
             currentAttractor = *select(currentIndex);
         }
         
@@ -177,8 +192,9 @@ int main()
             BeginMode3D(camera);
                 drawParticles(particles, camera, glow, currentAttractor.getParticleSize());
             EndMode3D();
-
-            DrawText("Current Attractor:", 10, 10, 20, DARKGRAY);
+            
+            string current = "Current System: " + currentAttractor.getName();
+            DrawText(current.c_str(), 10, 10, 20, DARKGRAY);
         EndDrawing();
     }
 

@@ -11,6 +11,7 @@ public:
 
     Attractor()
     {
+        name = "Parent";
         cameraPosition = Vec3(0.0, 0.0, 0.0);
         cameraTarget = Vec3(0.0, 0.0, 0.0);
     }
@@ -38,9 +39,10 @@ public:
     
     // This is a RK4 ODE solver for just the parent class, no child class should touch this
     Vec3 getNextStep(const Vec3 &currentPosition, float dt) const;
+    virtual string getName() const;
+
 
 private:
-
     float particleSize;
     Vec3 cameraPosition;
     Vec3 cameraTarget;
