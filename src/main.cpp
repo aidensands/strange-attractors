@@ -67,8 +67,10 @@ void reset_particles(vector<Vec3> &particles, Vec3 origin)
 int main()
 {
 
+    // Setup for loading parameters
+
     std::vector<unique_ptr<Attractor>> attractors;
-    attractors.reserve(4);
+    attractors.reserve(12); 
 
     attractors.push_back(make_unique<Lorenz>());
     attractors.push_back(make_unique<Rossler>());
@@ -82,10 +84,6 @@ int main()
 
     std::vector<Vec3> particles;
     particles.reserve(MAX_PARTICLES);
-
-    auto monitor = GetCurrentMonitor();
-    auto monitorWidth = GetMonitorWidth(monitor);
-    auto monitorHeight = GetMonitorHeight(monitor);
     
     InitWindow(1200, 800, "Strange Attractor Sim");
     SetTargetFPS(60);
@@ -99,11 +97,6 @@ int main()
     auto select = [&](size_t index)
     {
         cout << "Selecting attractor at: " << index << endl;
-
-        if (index < 0 | index > attractors.size() - 1)
-        {
-            /* code */
-        }
         
         Attractor &a = *attractors.at(index);
         particles.clear();
@@ -121,7 +114,7 @@ int main()
         return &a;
     };
 
-    Attractor &currentAttractor = *attractors[0];
+    Attractor &currentAttractor = *attractors.at(0);
     Vec3 origin = currentAttractor.initialState();
     Vec3 positionPreset = currentAttractor.getCameraPosition();
     Vec3 targetPreset = currentAttractor.getCameraTarget();
