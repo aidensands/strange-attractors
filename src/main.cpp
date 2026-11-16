@@ -9,6 +9,7 @@
 #include "attractors/sprott-linz.hpp"
 #include "attractors/chua.hpp"
 #include "attractors/thomas.hpp"
+#include "attractors/chenlee.hpp"
 #include <vector>
 
 using namespace std;
@@ -78,6 +79,7 @@ int main()
     attractors.push_back(make_unique<SprottLinz>());
     attractors.push_back(make_unique<Chua>());
     attractors.push_back(make_unique<Thomas>());
+    attractors.push_back(make_unique<Chenlee>());
     
     cout << "Successfully Loaded Chaotic Systems" <<endl;
 
