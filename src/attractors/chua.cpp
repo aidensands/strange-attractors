@@ -27,7 +27,7 @@ Vec3 Chua::initialState() const
 
 Vec3 Chua::getCameraPosition() const
 {
-    return Vec3(0.0, 0.0, 0.0);
+    return Vec3(5.0, 5.0, 5.0);
 }
 
 Vec3 Chua::getCameraTarget() const

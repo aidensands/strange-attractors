@@ -4,6 +4,7 @@
 Vec3 Attractor::getNextStep(const Vec3 &currentPosition, float dt) const
 {
     // RK4 Estimation for solving the ODE
+    // Possible optimization: collapse into single step 
     Vec3 k1 = derivative(currentPosition);
     Vec3 k2 = derivative(currentPosition + k1 * (dt * 0.5f));
     Vec3 k3 = derivative(currentPosition + k2 * (dt * 0.5f));
