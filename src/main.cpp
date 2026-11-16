@@ -10,6 +10,7 @@
 #include "attractors/chua.hpp"
 #include "attractors/thomas.hpp"
 #include "attractors/chenlee.hpp"
+#include "attractors/arneodo.hpp"
 #include <vector>
 
 using namespace std;
@@ -73,7 +74,7 @@ int main()
 
     std::vector<unique_ptr<Attractor>> attractors;
     attractors.reserve(12); 
-
+    attractors.push_back(make_unique<Arneodo>());
     attractors.push_back(make_unique<Lorenz>());
     attractors.push_back(make_unique<Rossler>());
     attractors.push_back(make_unique<Aizawa>());
