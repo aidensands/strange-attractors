@@ -74,7 +74,6 @@ int main()
 
     std::vector<unique_ptr<Attractor>> attractors;
     attractors.reserve(12); 
-    attractors.push_back(make_unique<Arneodo>());
     attractors.push_back(make_unique<Lorenz>());
     attractors.push_back(make_unique<Rossler>());
     attractors.push_back(make_unique<Aizawa>());
@@ -83,6 +82,7 @@ int main()
     attractors.push_back(make_unique<Chua>());
     attractors.push_back(make_unique<Thomas>());
     attractors.push_back(make_unique<Chenlee>());
+    attractors.push_back(make_unique<Arneodo>());
     
     cout << "Successfully Loaded Chaotic Systems" <<endl;
 
