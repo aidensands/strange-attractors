@@ -46,6 +46,7 @@ $$\frac{dz}{dt}=dz+\frac{xy}{3}$$
 $$\frac{dx}{dt}=y$$
 $$\frac{dy}{dt}=z$$
 $$\frac{dz}{dt}=-ax-by-z+cx^3$$
+
 8. The Sprott B Attractor
 9. The Dadras Attractor
 10. The Rabinovich-Fabrikant Attractor
