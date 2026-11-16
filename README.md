@@ -2,7 +2,7 @@
 A C++ simulator for chaos attractors
 
 ## Description
-strange-attractors is a `raylib` based simulator for modeling chaos attractors in 3D space. These attractors are governed by a set of orindary differential equations that are deterministic. Despite this, these attractors are highly sensitive to initial conditions which makes the long term prediction of their movements virtually impossible. The simulator uses an object oriented design where each child attractor calculates its own derivative and passes those values to a parent class which holds a Fourth Order Runge-Kutta differential equation solver. The simulator current supports all of the following strange attractors:
+strange-attractors is a `raylib` based simulator for modeling chaos attractors in 3D space. These attractors are governed by a set of orindary differential equations that are deterministic. Despite this, these attractors are highly sensitive to initial conditions which makes the long term prediction of their movements virtually impossible. The simulator uses an object oriented design where each child attractor calculates its own derivative and passes those values to a parent class which holds a Fourth Order Runge-Kutta differential equation estimator. Estimation allows us to compute particles position updates in linear time in terms of the number of particles. The simulator current supports all of the following strange attractors:
 
 ### Attractors
 1. The Lorenz Attractor
@@ -31,21 +31,36 @@ $$\frac{dz}{dt}=-az-4x-4y-x^2$$
 
 5. Thomas' Cyclically Symmetric Attractor
 
+<<<<<<< HEAD
 $$\frac{dx}{dt}=\sin(y)-bx$$
 $$\frac{dy}{dt}=\sin(z)-by$$
 $$\frac{dz}{dt}=\sin(x)-bz$$
+=======
+$$\frac{dx}{dt}=sin(y)-bx$$
+$$\frac{dy}{dt}=sin(z)-by$$
+$$\frac{dz}{dt}=sin(x)-bz$$
+>>>>>>> 79ddbeb6d6684c5d4d5b0d4fd2226add57c53968
 
 6. The Chen-Lee Attractor
 
 $$\frac{dx}{dt}=ax-yz$$
+<<<<<<< HEAD
 $$\frac{dy}{dt}=by+xz$$
 $$\frac{dz}{dt}=cz+\frac{xy}{3}$$
+=======
+$$\frac{dy}{dt}= by+xz$$
+$$\frac{dz}{dt}=dz+\frac{xy}{3}$$
+>>>>>>> 79ddbeb6d6684c5d4d5b0d4fd2226add57c53968
 
 7. The Arneodo Attractor
 
 $$\frac{dx}{dt}=y$$
 $$\frac{dy}{dt}=z$$
 $$\frac{dz}{dt}=-ax-by-z+cx^3$$
+<<<<<<< HEAD
+=======
+
+>>>>>>> 79ddbeb6d6684c5d4d5b0d4fd2226add57c53968
 8. The Sprott B Attractor
 9. The Dadras Attractor
 10. The Rabinovich-Fabrikant Attractor
