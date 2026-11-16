@@ -6,21 +6,29 @@ strange-attractors is a `raylib` based simulator for modeling chaos attractors i
 
 ### Attractors
 1. The Lorenz Attractor
+
 $$\frac{dx}{dt}=\sigma(y-x)$$
 $$\frac{dy}{dt}= x(\rho-z)-y$$
 $$\frac{dz}{dt}=xy-\beta z$$
+
 2. The Rössler Attractor
+
 $$\frac{dx}{dt}=-y-z$$
 $$\frac{dy}{dt}= x+ay$$
 $$\frac{dz}{dt}=b+z(x-c)$$
+
 3. The Aizawa Attractor
+
 $$\frac{dx}{dt}=(z-b)x-dy$$
 $$\frac{dy}{dt}=dx+(z-b)y$$
 $$\frac{dz}{dt}=c+az-\frac{z^3}{3}-(x^2+y^2)(1+ez)+fzx^3$$
+
 4. The Halvorson Attractor
+
 $$\frac{dx}{dt}=-ax-4y-4z-y^2$$
 $$\frac{dy}{dt}=-ay-4z-4x-z^2$$
 $$\frac{dz}{dt}=-az-4x-4y-x^2$$
+
 5. Thomas' Cyclically Symmetric Attractor
 6. The Chen-Lee Attractor
 7. The Arneodo Attractor
@@ -28,10 +36,13 @@ $$\frac{dz}{dt}=-az-4x-4y-x^2$$
 9. The Dadras Attractor
 10. The Rabinovich-Fabrikant Attractor
 11. The Sprott-Linz F Attractor
+
 $$\frac{dx}{dt}=y+z$$
 $$\frac{dy}{dt}= -x+a*y$$
 $$\frac{dz}{dt}=x^2-z$$
+
 12. The Chua Circuit Attractor
+
 $$\frac{dx}{dt}=\alpha(y-x-f(x))$$
 $$\frac{dy}{dt}=x-y+z$$
 $$\frac{dz}{dt}=z=-\beta y$$
