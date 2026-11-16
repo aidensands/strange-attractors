@@ -19,12 +19,12 @@ Vec3 Lorenz::derivative(const Vec3 &currentPosition) const
 
 Vec3 Lorenz::getCameraPosition() const
 {
-    return Vec3(10.0, 10.0, 25.0);
+    return Vec3(15.0, 15.0, 15.0);
 }
 
 Vec3 Lorenz::getCameraTarget() const
 {
-    return Vec3(0.0, 0.0, 10.0);
+    return Vec3(1.0, 1.0, 1.0);
 }
 
 float Lorenz::getParticleSize() const
