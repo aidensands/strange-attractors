@@ -16,6 +16,8 @@
 using namespace std;
 
 const size_t MAX_PARTICLES = 10000;
+const size_t TRAIL_LENGTH = 24;
+const size_t TRAIL_PARTICLE_STRIDE = 4;
 const int STEPS_PER_FRAME = 1;
 const float TIMESTEP = 0.005f;
 
@@ -57,6 +59,64 @@ void drawParticles(const std::vector<Vec3> &particles, const Camera3D &camera,
     rlEnableDepthMask();
 }
 
+void drawTrails(const std::vector<Vec3> &trailHistory, size_t trailHead,
+                size_t trailCount)
+{
+    if (trailCount < 2)
+    {
+        return;
+    }
+
+    const size_t oldestSlot = (trailHead + TRAIL_LENGTH - trailCount) % TRAIL_LENGTH;
+
+    rlDisableDepthMask();
+    BeginBlendMode(BLEND_ALPHA);
+    rlSetTexture(0);
+    rlBegin(RL_LINES);
+
+    for (size_t particleIndex = 0; particleIndex < MAX_PARTICLES;
+         particleIndex += TRAIL_PARTICLE_STRIDE)
+    {
+        const size_t particleOffset = particleIndex * TRAIL_LENGTH;
+
+        for (size_t age = 0; age + 1 < trailCount; ++age)
+        {
+            const size_t firstSlot = (oldestSlot + age) % TRAIL_LENGTH;
+            const size_t secondSlot = (oldestSlot + age + 1) % TRAIL_LENGTH;
+            const Vec3 &first = trailHistory[particleOffset + firstSlot];
+            const Vec3 &second = trailHistory[particleOffset + secondSlot];
+            const unsigned char alpha = static_cast<unsigned char>(
+                20 + (100 * (age + 1)) / (trailCount - 1));
+
+            rlCheckRenderBatchLimit(2);
+            rlColor4ub(135, 206, 235, alpha);
+            rlVertex3f(first.x, first.y, first.z);
+            rlVertex3f(second.x, second.y, second.z);
+        }
+    }
+
+    rlEnd();
+    EndBlendMode();
+    rlEnableDepthMask();
+}
+
+void resetTrails(const std::vector<Vec3> &particles,
+                 std::vector<Vec3> &trailHistory,
+                 size_t &trailHead, size_t &trailCount)
+{
+    for (size_t particleIndex = 0; particleIndex < particles.size(); ++particleIndex)
+    {
+        const size_t particleOffset = particleIndex * TRAIL_LENGTH;
+        for (size_t slot = 0; slot < TRAIL_LENGTH; ++slot)
+        {
+            trailHistory[particleOffset + slot] = particles[particleIndex];
+        }
+    }
+
+    trailHead = 0;
+    trailCount = 1;
+}
+
 void reset_particles(vector<Vec3> &particles, Vec3 origin)
 {
     particles.clear();
@@ -89,6 +149,10 @@ int main()
 
     std::vector<Vec3> particles;
     particles.reserve(MAX_PARTICLES);
+    std::vector<Vec3> trailHistory(MAX_PARTICLES * TRAIL_LENGTH);
+    size_t trailHead = 0;
+    size_t trailCount = 0;
+    bool trailsEnabled = true;
     
     InitWindow(1200, 800, "Strange Attractor Sim");
     SetTargetFPS(60);
@@ -116,6 +180,7 @@ int main()
         {
             particles.push_back(Vec3(updatedOrigin.x + jitter(), updatedOrigin.y + jitter(), updatedOrigin.z + jitter()));
         }
+        resetTrails(particles, trailHistory, trailHead, trailCount);
         return &a;
     };
 
@@ -133,6 +198,7 @@ int main()
     {
         particles.push_back(Vec3(origin.x + jitter(), origin.y + jitter(), origin.z + jitter()));
     }
+    resetTrails(particles, trailHistory, trailHead, trailCount);
 
     signed int currentIndex = 0;
 
@@ -165,6 +231,12 @@ int main()
         if (IsKeyPressed(KEY_R))
         {
             reset_particles(particles, currentAttractor.initialState());
+            resetTrails(particles, trailHistory, trailHead, trailCount);
+        }
+
+        if (IsKeyPressed(KEY_T))
+        {
+            trailsEnabled = !trailsEnabled;
         }
         
         for (size_t i = 0; i < STEPS_PER_FRAME; ++i)
@@ -173,6 +245,18 @@ int main()
             {
                 particle = currentAttractor.getNextStep(particle, TIMESTEP);
             }   
+
+            for (size_t particleIndex = 0; particleIndex < particles.size(); ++particleIndex)
+            {
+                trailHistory[particleIndex * TRAIL_LENGTH + trailHead] =
+                    particles[particleIndex];
+            }
+
+            trailHead = (trailHead + 1) % TRAIL_LENGTH;
+            if (trailCount < TRAIL_LENGTH)
+            {
+                ++trailCount;
+            }
         }
 
         UpdateCamera(&camera, CAMERA_ORBITAL);
@@ -188,11 +272,16 @@ int main()
             );
 
             BeginMode3D(camera);
+                if (trailsEnabled)
+                {
+                    drawTrails(trailHistory, trailHead, trailCount);
+                }
                 drawParticles(particles, camera, glow, currentAttractor.getParticleSize());
             EndMode3D();
             
             string current = "Current System: " + currentAttractor.getName();
             DrawText(current.c_str(), 10, 10, 20, DARKGRAY);
+            DrawText("T: toggle trails", 10, 35, 20, DARKGRAY);
         EndDrawing();
     }
 
